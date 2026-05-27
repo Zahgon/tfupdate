@@ -1,13 +1,8 @@
 package tfupdate
 
 import (
-	"log"
-
-	version "github.com/hashicorp/go-version"
 	"github.com/minamijoyo/terraform-config-inspect/tfconfig"
 	"github.com/spf13/afero"
-	"golang.org/x/exp/maps"
-	"golang.org/x/exp/slices"
 )
 
 // GlobalContext is information that is shared over the lifetime of the process.
@@ -24,18 +19,8 @@ type GlobalContext struct {
 
 // NewGlobalContext returns a new instance of NewGlobalContext.
 func NewGlobalContext(fs afero.Fs, o Option) (*GlobalContext, error) {
-	updater, err := NewUpdater(o)
-	if err != nil {
-		return nil, err
-	}
-
-	gc := &GlobalContext{
-		fs:      fs,
-		updater: updater,
-		option:  o,
-	}
-
-	return gc, nil
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 // ModuleContext is information shared across files within a directory.
@@ -75,122 +60,88 @@ type SelectedProvider struct {
 // It might be better to use the native OS filesystem for testing without
 // relying on afero.
 func aferoToTfconfigFS(afs afero.Fs) tfconfig.FS {
-	return tfconfig.WrapFS(afero.NewIOFS(afs))
+	_ = "STUB: not implemented"
+	return *new(tfconfig.FS)
 }
 
 // NewModuleContext parses a given module and returns a new ModuleContext.
 // The dir is a relative path to the module from the current working directory.
 func NewModuleContext(dir string, gc *GlobalContext) (*ModuleContext, error) {
-	requiredProviders := make(map[string]*tfconfig.ProviderRequirement)
-	m, diags := tfconfig.LoadModuleFromFilesystem(aferoToTfconfigFS(gc.fs), dir)
-	if diags.HasErrors() {
-		// There is a known issue passing absolute paths to afero.IOFS results in
-		// an error, but as the result of module inspection is not essential for
-		// all use cases now, we intentionally ignore the error here.
-		// https://github.com/minamijoyo/tfupdate/issues/93
-		log.Printf("[DEBUG] failed to load module: dir = %s, err = %s", dir, diags)
-	} else {
-		requiredProviders = m.RequiredProviders
-	}
-
-	c := &ModuleContext{
-		gc:                gc,
-		dir:               dir,
-		requiredProviders: requiredProviders,
-	}
-
-	return c, nil
+	_ = "STUB: not implemented"
+	return nil, nil
 }
+
+// There is a known issue passing absolute paths to afero.IOFS results in
+// an error, but as the result of module inspection is not essential for
+// all use cases now, we intentionally ignore the error here.
+// https://github.com/minamijoyo/tfupdate/issues/93
 
 // GlobalContext returns an instance of the global context.
 func (mc *ModuleContext) GlobalContext() *GlobalContext {
-	return mc.gc
+	_ = "STUB: not implemented"
+
+	// FS returns an instance of afero filesystem
+	return nil
 }
 
-// FS returns an instance of afero filesystem
 func (mc *ModuleContext) FS() afero.Fs {
-	return mc.gc.fs
+	_ = "STUB: not implemented"
+
+	// Updater returns an instance of Updater.
+	return *new(afero.Fs)
 }
 
-// Updater returns an instance of Updater.
 func (mc *ModuleContext) Updater() Updater {
-	return mc.gc.updater
+	_ = "STUB: not implemented"
+	return *
+
+	// Option returns an instance of Option.
+	new(Updater)
 }
 
-// Option returns an instance of Option.
 func (mc *ModuleContext) Option() Option {
-	return mc.gc.option
+	_ = "STUB: not implemented"
+	return *
+
+	// SelectedProviders returns a list of providers inferred from version constraints.
+	// The result is sorted alphabetically by source address.
+	// Version constraints only support simple constants and not comparison
+	// operators. Ignore what cannot be interpreted.
+	new(Option)
 }
 
-// SelectedProviders returns a list of providers inferred from version constraints.
-// The result is sorted alphabetically by source address.
-// Version constraints only support simple constants and not comparison
-// operators. Ignore what cannot be interpreted.
 func (mc *ModuleContext) SelecetedProviders() []SelectedProvider {
-	selected := make(map[string]string)
-	for _, p := range mc.requiredProviders {
-		if p.Source == "" {
-			// A source address with an empty string implies an unknown namespace prior to
-			// Terraform v0.13, but since this is already a deprecated usage, we don't
-			// implicitly complement the official hashicorp namespace and is not included
-			// in the results.
-			log.Printf("[DEBUG] ModuleContext.SelecetedProviders: ignore legacy provider address notation: %s", p.Source)
-			continue
-		}
-
-		v := selectVersion(p.VersionConstraints)
-
-		if v == "" {
-			// Ignore if no version is specified.
-			log.Printf("[DEBUG] ModuleContext.SelecetedProviders: ignore no version selected: %s", p.Source)
-			continue
-		}
-
-		// It is not possible to mix multiple provider versions in one module, so
-		// simply overwrite without taking duplicates into account
-		selected[p.Source] = v
-	}
-
-	// Sort to get stable results
-	keys := maps.Keys(selected)
-	slices.Sort(keys)
-
-	ret := []SelectedProvider{}
-	for _, k := range keys {
-		s := SelectedProvider{Source: k, Version: selected[k]}
-		ret = append(ret, s)
-	}
-	return ret
+	_ = "STUB: not implemented"
+	return nil
 }
+
+// A source address with an empty string implies an unknown namespace prior to
+// Terraform v0.13, but since this is already a deprecated usage, we don't
+// implicitly complement the official hashicorp namespace and is not included
+// in the results.
+
+// Ignore if no version is specified.
+
+// It is not possible to mix multiple provider versions in one module, so
+// simply overwrite without taking duplicates into account
+
+// Sort to get stable results
 
 // selectVersion resolves version constraints and returns the version.
 // Note that it does not actually re-implement the resolution of version
 // constraints in terraform init. It is very simplified for the use we need.
 // Version constraints only support simple constants and not comparison
 // operators. Ignore what cannot be interpreted.
-func selectVersion(constraints []string) string {
-	for _, c := range constraints {
-		v, err := version.NewVersion(c)
-		if err != nil {
-			// Ignore parse error
-			log.Printf("[DEBUG] selectVersion: ignore version parse error: constaraints = %#v, err = %s", constraints, err)
-			continue
-		}
-		// return the first one found
-		return v.String()
-	}
-	return ""
-}
+func selectVersion(constraints []string) string { _ = "STUB: not implemented"; return "" }
+
+// Ignore parse error
+
+// return the first one found
 
 // ResolveProviderShortNameFromSource is a helper function to resolve provider
 // short names from the source address.
 // If not found, return an empty string.
 func (mc *ModuleContext) ResolveProviderShortNameFromSource(source string) string {
-	for k, v := range mc.requiredProviders {
-		if v.Source == source {
-			return k
-		}
-	}
-
+	_ = "STUB: not implemented"
 	return ""
 }

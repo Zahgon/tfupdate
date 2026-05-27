@@ -1,11 +1,7 @@
 package command
 
 import (
-	"fmt"
-
-	"github.com/kelseyhightower/envconfig"
 	"github.com/minamijoyo/tfupdate/release"
-	"github.com/minamijoyo/tfupdate/tfregistry"
 	"github.com/mitchellh/cli"
 	"github.com/spf13/afero"
 )
@@ -21,36 +17,6 @@ type Meta struct {
 
 // newRelease is a factory method which returns an Release implementation.
 func newRelease(sourceType string, source string) (release.Release, error) {
-	var env Env
-	err := envconfig.Process("", &env)
-	if err != nil {
-		return nil, fmt.Errorf("failed to fetch environment variables: %s", err)
-	}
-
-	switch sourceType {
-	case "github":
-		config := release.GitHubConfig{
-			BaseURL: env.GitHubBaseURL,
-			Token:   env.GitHubToken,
-		}
-		return release.NewGitHubRelease(source, config)
-	case "gitlab":
-		config := release.GitLabConfig{
-			BaseURL: env.GitLabBaseURL,
-			Token:   env.GitLabToken,
-		}
-		return release.NewGitLabRelease(source, config)
-	case "tfregistryModule":
-		config := tfregistry.Config{
-			BaseURL: env.TFRegistryBaseURL,
-		}
-		return release.NewTFRegistryModuleRelease(source, config)
-	case "tfregistryProvider":
-		config := tfregistry.Config{
-			BaseURL: env.TFRegistryBaseURL,
-		}
-		return release.NewTFRegistryProviderRelease(source, config)
-	default:
-		return nil, fmt.Errorf("failed to new release data source. unknown type: %s", sourceType)
-	}
+	_ = "STUB: not implemented"
+	return *new(release.Release), nil
 }

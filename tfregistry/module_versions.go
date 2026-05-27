@@ -2,7 +2,6 @@ package tfregistry
 
 import (
 	"context"
-	"fmt"
 )
 
 // ListModuleVersionsRequest is a request parameter for the ListModuleVersions API.
@@ -37,36 +36,6 @@ type ModuleVersion struct {
 // ListModuleVersions returns all versions of a module for a single provider.
 // This works for both Terraform and OpenTofu registries.
 func (c *Client) ListModuleVersions(ctx context.Context, req *ListModuleVersionsRequest) (*ListModuleVersionsResponse, error) {
-	if len(req.Namespace) == 0 {
-		return nil, fmt.Errorf("invalid request. Namespace is required. req = %#v", req)
-	}
-	if len(req.Name) == 0 {
-		return nil, fmt.Errorf("invalid request. Name is required. req = %#v", req)
-	}
-	if len(req.Provider) == 0 {
-		return nil, fmt.Errorf("invalid request. Provider is required. req = %#v", req)
-	}
-
-	subPath := fmt.Sprintf("%s%s/%s/%s/versions", moduleV1Service, req.Namespace, req.Name, req.Provider)
-
-	httpRequest, err := c.newRequest(ctx, "GET", subPath, nil)
-	if err != nil {
-		return nil, err
-	}
-
-	httpResponse, err := c.httpClient.Do(httpRequest)
-	if err != nil {
-		return nil, fmt.Errorf("failed to HTTP Request: err = %s, req = %#v", err, httpRequest)
-	}
-
-	if httpResponse.StatusCode != 200 {
-		return nil, fmt.Errorf("unexpected HTTP Status Code: %d", httpResponse.StatusCode)
-	}
-
-	var res ListModuleVersionsResponse
-	if err := decodeBody(httpResponse, &res); err != nil {
-		return nil, err
-	}
-
-	return &res, nil
+	_ = "STUB: not implemented"
+	return nil, nil
 }

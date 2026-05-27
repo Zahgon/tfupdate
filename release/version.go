@@ -1,75 +1,40 @@
 package release
 
 import (
-	"sort"
-
 	version "github.com/hashicorp/go-version"
 )
 
 func tagNameToVersion(tagName string) string {
+	_ = "STUB: not implemented"
 	// if a tagName starts with `v`, remove it.
-	if tagName[0] == 'v' {
-		return tagName[1:]
-	}
-
-	return tagName
+	return ""
 }
 
 func reverseStringSlice(s []string) []string {
-	r := []string{}
+	_ = "STUB: not implemented"
+
 	// apparently inefficient but simple way
-	for i := len(s) - 1; i >= 0; i-- {
-		r = append(r, s[i])
-	}
-	return r
+	return nil
 }
 
-func minInt(a, b int) int {
-	if a < b {
-		return a
-	}
-	return b
-}
+func minInt(a, b int) int { _ = "STUB: not implemented"; return 0 }
 
 // toVersions converts []string to []*version.Version.
 // Ignore if parse error.
-func toVersions(versionsRaw []string) []*version.Version {
-	versions := []*version.Version{}
-	for _, raw := range versionsRaw {
-		v, err := version.NewVersion(raw)
-		if err != nil {
-			continue
-		}
-		versions = append(versions, v)
-	}
-	return versions
-}
+func toVersions(versionsRaw []string) []*version.Version { _ = "STUB: not implemented"; return nil }
 
 // fromVersions converts []*version.Version to []string.
-func fromVersions(versions []*version.Version) []string {
-	versionsRaw := make([]string, len(versions))
-	for i, v := range versions {
-		raw := v.String()
-		versionsRaw[i] = raw
-	}
-	return versionsRaw
-}
+func fromVersions(versions []*version.Version) []string { _ = "STUB: not implemented"; return nil }
 
 // sortVersions sort a list of versions in semver order.
 func sortVersions(versions []*version.Version) []*version.Version {
-	sort.Sort(version.Collection(versions))
-	return versions
+	_ = "STUB: not implemented"
+	return nil
 }
 
 // excludePreReleases excludes pre-releases such as alpha, beta, rc.
 func excludePreReleases(versions []*version.Version) []*version.Version {
+	_ = "STUB: not implemented"
 	// exclude pre-release
-	filtered := []*version.Version{}
-	for _, v := range versions {
-		if len(v.Prerelease()) == 0 {
-			filtered = append(filtered, v)
-		}
-	}
-
-	return filtered
+	return nil
 }

@@ -5,12 +5,8 @@ import (
 	"io"
 	"log"
 	"os"
-	"strings"
 
-	"github.com/hashicorp/logutils"
-	"github.com/minamijoyo/tfupdate/command"
 	"github.com/mitchellh/cli"
-	"github.com/spf13/afero"
 )
 
 // Version is a version number.
@@ -54,73 +50,8 @@ func main() {
 	os.Exit(exitStatus)
 }
 
-func logOutput() io.Writer {
-	levels := []logutils.LogLevel{"TRACE", "DEBUG", "INFO", "WARN", "ERROR"}
-	minLevel := os.Getenv("TFUPDATE_LOG")
+func logOutput() io.Writer { _ = "STUB: not implemented"; return *new(io.Writer) }
 
-	// default log writer is null device.
-	writer := io.Discard
-	if minLevel != "" {
-		writer = os.Stderr
-	}
+// default log writer is null device.
 
-	filter := &logutils.LevelFilter{
-		Levels:   levels,
-		MinLevel: logutils.LogLevel(strings.ToUpper(minLevel)),
-		Writer:   writer,
-	}
-
-	return filter
-}
-
-func initCommands() map[string]cli.CommandFactory {
-	meta := command.Meta{
-		UI: UI,
-		Fs: afero.NewOsFs(),
-	}
-
-	commands := map[string]cli.CommandFactory{
-		"terraform": func() (cli.Command, error) {
-			return &command.TerraformCommand{
-				Meta: meta,
-			}, nil
-		},
-		"opentofu": func() (cli.Command, error) {
-			return &command.OpenTofuCommand{
-				Meta: meta,
-			}, nil
-		},
-		"provider": func() (cli.Command, error) {
-			return &command.ProviderCommand{
-				Meta: meta,
-			}, nil
-		},
-		"module": func() (cli.Command, error) {
-			return &command.ModuleCommand{
-				Meta: meta,
-			}, nil
-		},
-		"lock": func() (cli.Command, error) {
-			return &command.LockCommand{
-				Meta: meta,
-			}, nil
-		},
-		"release": func() (cli.Command, error) {
-			return &command.ReleaseCommand{
-				Meta: meta,
-			}, nil
-		},
-		"release latest": func() (cli.Command, error) {
-			return &command.ReleaseLatestCommand{
-				Meta: meta,
-			}, nil
-		},
-		"release list": func() (cli.Command, error) {
-			return &command.ReleaseListCommand{
-				Meta: meta,
-			}, nil
-		},
-	}
-
-	return commands
-}
+func initCommands() map[string]cli.CommandFactory { _ = "STUB: not implemented"; return nil }

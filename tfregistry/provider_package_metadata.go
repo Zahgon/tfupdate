@@ -2,8 +2,6 @@ package tfregistry
 
 import (
 	"context"
-	"fmt"
-	"log"
 )
 
 // ProviderPackageMetadataRequest is a request parameter for ProviderPackageMetadata().
@@ -37,43 +35,6 @@ type ProviderPackageMetadataResponse struct {
 // ProviderPackageMetadata returns a package metadata of a provider.
 // https://developer.hashicorp.com/terraform/internals/provider-registry-protocol#find-a-provider-package
 func (c *Client) ProviderPackageMetadata(ctx context.Context, req *ProviderPackageMetadataRequest) (*ProviderPackageMetadataResponse, error) {
-	if len(req.Namespace) == 0 {
-		return nil, fmt.Errorf("invalid request. Namespace is required. req = %#v", req)
-	}
-	if len(req.Type) == 0 {
-		return nil, fmt.Errorf("invalid request. Type is required. req = %#v", req)
-	}
-	if len(req.Version) == 0 {
-		return nil, fmt.Errorf("invalid request. Version is required. req = %#v", req)
-	}
-	if len(req.OS) == 0 {
-		return nil, fmt.Errorf("invalid request. OS is required. req = %#v", req)
-	}
-	if len(req.Arch) == 0 {
-		return nil, fmt.Errorf("invalid request. Arch is required. req = %#v", req)
-	}
-
-	subPath := fmt.Sprintf("%s%s/%s/%s/download/%s/%s", providerV1Service, req.Namespace, req.Type, req.Version, req.OS, req.Arch)
-
-	httpRequest, err := c.newRequest(ctx, "GET", subPath, nil)
-	if err != nil {
-		return nil, err
-	}
-
-	log.Printf("[DEBUG] Client.ProviderPackageMetadata: GET %s", httpRequest.URL)
-	httpResponse, err := c.httpClient.Do(httpRequest)
-	if err != nil {
-		return nil, fmt.Errorf("failed to HTTP Request: err = %s, req = %#v", err, httpRequest)
-	}
-
-	if httpResponse.StatusCode != 200 {
-		return nil, fmt.Errorf("unexpected HTTP Status Code: %d", httpResponse.StatusCode)
-	}
-
-	var res ProviderPackageMetadataResponse
-	if err := decodeBody(httpResponse, &res); err != nil {
-		return nil, err
-	}
-
-	return &res, nil
+	_ = "STUB: not implemented"
+	return nil, nil
 }

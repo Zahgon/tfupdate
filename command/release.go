@@ -1,32 +1,18 @@
 package command
 
-import (
-	"strings"
-
-	"github.com/mitchellh/cli"
-)
-
 // ReleaseCommand is a command which just shows help for subcommands.
 type ReleaseCommand struct {
 	Meta
 }
 
 // Run runs the procedure of this command.
-func (c *ReleaseCommand) Run(args []string) int { // nolint revive unused-parameter
-	return cli.RunResultHelp
+func (c *ReleaseCommand) Run(args []string) int {
+	_ = "STUB: not implemented" // nolint revive unused-parameter
+	return 0
 }
 
 // Help returns long-form help text.
-func (c *ReleaseCommand) Help() string {
-	helpText := `
-Usage: tfupdate release <subcommand> [options] [args]
-
-  This command has subcommands for release version information.
-`
-	return strings.TrimSpace(helpText)
-}
+func (c *ReleaseCommand) Help() string { _ = "STUB: not implemented"; return "" }
 
 // Synopsis returns one-line help text.
-func (c *ReleaseCommand) Synopsis() string {
-	return "Get release version information"
-}
+func (c *ReleaseCommand) Synopsis() string { _ = "STUB: not implemented"; return "" }

@@ -2,13 +2,9 @@ package tfupdate
 
 import (
 	"context"
-	"path/filepath"
 	"regexp"
 
-	"github.com/hashicorp/hcl/v2/hclsyntax"
 	"github.com/hashicorp/hcl/v2/hclwrite"
-	"github.com/pkg/errors"
-	"github.com/zclconf/go-cty/cty"
 )
 
 // moduleSourceRegexp is a regular expression for module source.
@@ -27,80 +23,38 @@ type ModuleUpdater struct {
 
 // NewModuleUpdater is a factory method which returns an ModuleUpdater instance.
 func NewModuleUpdater(name string, version string, nameRegex *regexp.Regexp) (Updater, error) {
-	if len(name) == 0 {
-		return nil, errors.Errorf("failed to new module updater. name is required")
-	}
-
-	if len(version) == 0 {
-		return nil, errors.Errorf("failed to new module updater. version is required")
-	}
-
-	return &ModuleUpdater{
-		name:      name,
-		nameRegex: nameRegex,
-		version:   version,
-	}, nil
+	_ = "STUB: not implemented"
+	return *new(Updater), nil
 }
 
 // Update updates the module version constraint.
 // Note that this method will rewrite the AST passed as an argument.
 func (u *ModuleUpdater) Update(_ context.Context, _ *ModuleContext, filename string, f *hclwrite.File) error {
-	if filepath.Base(filename) == ".terraform.lock.hcl" {
-		// skip a lock file.
-		return nil
-	}
-
-	return u.updateModuleBlock(f)
-}
-
-func (u *ModuleUpdater) match(name string) bool {
-	if u.nameRegex == nil {
-		return u.name == name
-	}
-	return u.nameRegex.MatchString(name)
-}
-
-func (u *ModuleUpdater) updateModuleBlock(f *hclwrite.File) error {
-	for _, m := range allMatchingBlocksByType(f.Body(), "module") {
-		if s := m.Body().GetAttribute("source"); s != nil {
-			name, version := parseModuleSource(s)
-			// If this module is a target module
-			if u.match(name) {
-				if len(version) == 0 {
-					// The source attribute doesn't have a version number.
-					// Set a version to attribute value only if the version key exists.
-					if m.Body().GetAttribute("version") != nil {
-						m.Body().SetAttributeValue("version", cty.StringVal(u.version))
-					}
-					continue
-				}
-				// The source attribute has a version number.
-				// Update a version reference in the source value.
-				newSourceValue := name + `?ref=v` + u.version
-				m.Body().SetAttributeValue("source", cty.StringVal(newSourceValue))
-			}
-		}
-	}
-
+	_ = "STUB: not implemented"
 	return nil
 }
 
+// skip a lock file.
+
+func (u *ModuleUpdater) match(name string) bool { _ = "STUB: not implemented"; return false }
+
+func (u *ModuleUpdater) updateModuleBlock(f *hclwrite.File) error {
+	_ = "STUB: not implemented"
+	return nil
+}
+
+// If this module is a target module
+
+// The source attribute doesn't have a version number.
+// Set a version to attribute value only if the version key exists.
+
+// The source attribute has a version number.
+// Update a version reference in the source value.
+
 // parseModuleSource parses module source and returns module name and version.
 func parseModuleSource(a *hclwrite.Attribute) (string, string) {
-	tokens := a.Expr().BuildTokens(nil)
-	if len(tokens) == 3 &&
-		tokens[0].Type == hclsyntax.TokenOQuote &&
-		tokens[1].Type == hclsyntax.TokenQuotedLit &&
-		tokens[2].Type == hclsyntax.TokenCQuote {
-		source := string(tokens[1].Bytes)
-		matched := moduleSourceRegexp.FindStringSubmatch(source)
-		if len(matched) == 0 {
-			// no version number
-			return source, ""
-		}
-		name := matched[1]
-		version := matched[2]
-		return name, version
-	}
+	_ = "STUB: not implemented"
 	return "", ""
 }
+
+// no version number

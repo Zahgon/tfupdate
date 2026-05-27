@@ -2,7 +2,6 @@ package tfregistry
 
 import (
 	"context"
-	"fmt"
 )
 
 // ListProviderVersionsRequest is a request parameter for ListProviderVersions API.
@@ -40,33 +39,6 @@ type ProviderPlatform struct {
 // ListProviderVersions returns all versions of a provider.
 // This works for both Terraform and OpenTofu registries.
 func (c *Client) ListProviderVersions(ctx context.Context, req *ListProviderVersionsRequest) (*ListProviderVersionsResponse, error) {
-	if len(req.Namespace) == 0 {
-		return nil, fmt.Errorf("invalid request. Namespace is required. req = %#v", req)
-	}
-	if len(req.Type) == 0 {
-		return nil, fmt.Errorf("invalid request. Type is required. req = %#v", req)
-	}
-
-	subPath := fmt.Sprintf("%s%s/%s/versions", providerV1Service, req.Namespace, req.Type)
-
-	httpRequest, err := c.newRequest(ctx, "GET", subPath, nil)
-	if err != nil {
-		return nil, err
-	}
-
-	httpResponse, err := c.httpClient.Do(httpRequest)
-	if err != nil {
-		return nil, fmt.Errorf("failed to HTTP Request: err = %s, req = %#v", err, httpRequest)
-	}
-
-	if httpResponse.StatusCode != 200 {
-		return nil, fmt.Errorf("unexpected HTTP Status Code: %d", httpResponse.StatusCode)
-	}
-
-	var res ListProviderVersionsResponse
-	if err := decodeBody(httpResponse, &res); err != nil {
-		return nil, err
-	}
-
-	return &res, nil
+	_ = "STUB: not implemented"
+	return nil, nil
 }
